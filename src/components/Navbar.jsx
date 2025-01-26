@@ -22,7 +22,7 @@ import { setUser } from "../reduxconfig/reducers/userSlice";
 import Loader from "./Loader";
 
 const drawerWidth = 240;
-const navItems = ["Home", "Dashboard", "Contact"];
+const navItems = ["Home", "Dashboard"];
 
 function Navbar(props) {
   const user = useSelector((state) => state.users.user);

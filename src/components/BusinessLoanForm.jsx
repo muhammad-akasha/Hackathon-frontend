@@ -15,7 +15,11 @@ import { useForm, Controller } from "react-hook-form";
 import { api } from "../axios-interceptor/axios";
 
 export default function BusinessLoanForm() {
-  const { control, handleSubmit } = useForm();
+  const {
+    control,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm();
   const onSubmit = async (data) => {
     // console.log("Form Submitted:", data);
     const {
@@ -226,8 +230,15 @@ export default function BusinessLoanForm() {
 
         {/* Submit Button */}
         <Box sx={{ mt: 3 }}>
-          <Button variant="contained" color="primary" type="submit" fullWidth>
-            Submit
+          {/* Submit Button */}
+          <Button
+            disabled={isSubmitting}
+            type="submit"
+            variant="contained"
+            color="primary"
+            sx={{ mt: 3, width: "100%" }}
+          >
+            {isSubmitting ? "Submitting" : "Submit"}
           </Button>
         </Box>
       </form>

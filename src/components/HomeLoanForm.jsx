@@ -19,8 +19,7 @@ export default function HomeConstructionLoanForm() {
   const {
     control,
     handleSubmit,
-    formState: { errors },
-    setValue,
+    formState: { errors, isSubmitting },
   } = useForm();
 
   const onSubmit = async (data) => {
@@ -193,11 +192,15 @@ export default function HomeConstructionLoanForm() {
         </Grid>
 
         {/* Submit Button */}
-        <Box sx={{ mt: 3 }}>
-          <Button variant="contained" color="primary" type="submit" fullWidth>
-            Submit
-          </Button>
-        </Box>
+        <Button
+          disabled={isSubmitting}
+          type="submit"
+          variant="contained"
+          color="primary"
+          sx={{ mt: 3, width: "100%" }}
+        >
+          {isSubmitting ? "Submitting" : "Submit"}
+        </Button>
       </form>
     </Box>
   );

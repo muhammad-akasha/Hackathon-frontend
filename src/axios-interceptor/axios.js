@@ -3,7 +3,7 @@ import axios from "axios";
 
 // Define the Axios instance with types
 export const api = axios.create({
-  baseURL: "http://localhost:3000/api/v1/", // base URL
+  baseURL: "https://final-hackathon-backend-ten.vercel.app/api/v1/", // base URL
   withCredentials: true, // Send cookies with requests
 });
 

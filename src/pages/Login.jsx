@@ -30,7 +30,6 @@ const Login = () => {
         setUser({
           name: res.data.user.userName,
           email: res.data.user.email,
-          picture: res.data.user.profilePic.profilePic,
           role: res.data.user.role,
         })
       );

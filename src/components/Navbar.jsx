@@ -198,13 +198,6 @@ function Navbar(props) {
             },
           }}
         >
-          <img
-            width={40}
-            height={40}
-            src={user.picture || "/public/vite.svg"} // Display user picture
-            alt={user.name || "User"} // Fallback alt if name is missing
-            style={{ borderRadius: "50%" }} // Make the image circular
-          />
           <Typography>{user.username}</Typography> {/* Display username */}
         </Box>
         <MenuItem onClick={handleLogout}>Logout</MenuItem>

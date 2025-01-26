@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   CssBaseline,
@@ -8,8 +8,6 @@ import {
   ListItemIcon,
   ListItemText,
   Typography,
-  TextField,
-  Button,
 } from "@mui/material";
 import HomeWorkIcon from "@mui/icons-material/HomeWork";
 import BusinessIcon from "@mui/icons-material/Business";
@@ -19,13 +17,16 @@ import WeddingLoanForm from "./WeddingLoanForm";
 import HomeConstructionLoanForm from "./HomeLoanForm";
 import BusinessLoanForm from "./BusinessLoanForm";
 import EducationLoanForm from "./EducationLoanForm";
-
+import WelcomePage from "./Welcome";
+import { useSelector } from "react-redux";
 const categories = [
-  { id: "wedding", name: "Wedding Loans", icon: <CelebrationIcon /> },
-  { id: "home", name: "Home Construction Loans", icon: <HomeWorkIcon /> },
-  { id: "business", name: "Business Startup Loans", icon: <BusinessIcon /> },
-  { id: "education", name: "Education Loans", icon: <SchoolIcon /> },
+    { id: "wedding", name: "Wedding Loans", icon: <CelebrationIcon /> },
+    { id: "home", name: "Home Construction Loans", icon: <HomeWorkIcon /> },
+    { id: "business", name: "Business Startup Loans", icon: <BusinessIcon /> },
+    { id: "education", name: "Education Loans", icon: <SchoolIcon /> },
 ];
+
+
 
 const forms = {
   wedding: (
@@ -45,8 +46,23 @@ const forms = {
 };
 
 export default function MicrofinanceDashboard() {
-  const [selectedCategory, setSelectedCategory] = useState("wedding");
+    const [selectedCategory, setSelectedCategory] = useState("wedding");
+    
+    const user = useSelector((state) => state.users.user);
+      const [isLoggedIn, setIsLoggedIn] = useState(true);
 
+  useEffect(() => {
+    // Check if the user is logged in
+    if (!user.username) {
+      setIsLoggedIn(false);
+    }
+  }, [user]);
+
+  // Conditionally render the WelcomePage based on `isLoggedIn`
+  if (!isLoggedIn) {
+    return <WelcomePage />;
+  }
+     
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />

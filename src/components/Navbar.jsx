@@ -58,9 +58,12 @@ function Navbar(props) {
   };
 
   const drawer = (
-    <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
-      <Typography variant="h6" sx={{ my: 2 }}>
-        MUI
+    <Box
+      onClick={handleDrawerToggle}
+      sx={{ textAlign: "center", marginTop: 10 }}
+    >
+      <Typography variant="h6" sx={{ my: 2, width: 200 }}>
+        Microfinance App
       </Typography>
       <Divider />
       <List>
@@ -108,9 +111,13 @@ function Navbar(props) {
           <Typography
             variant="h6"
             component="div"
-            sx={{ flexGrow: 1, display: { xs: "block", sm: "block" } }}
+            sx={{
+              flexGrow: 1,
+              width: 200,
+              display: { xs: "block", sm: "block" },
+            }}
           >
-            MUI
+            Microfinance App
           </Typography>
           <Box
             sx={{
@@ -160,6 +167,7 @@ function Navbar(props) {
             keepMounted: true, // Better open performance on mobile.
           }}
           sx={{
+            marginTop: 64,
             display: { xs: "block", sm: "none" },
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",

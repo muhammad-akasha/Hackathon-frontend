@@ -4,14 +4,13 @@ import "./index.css";
 import Layout from "./Layout";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
 import { Provider } from "react-redux";
 import { store } from "./reduxconfig/store/store";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import GetLoginUser from "./components/GetLoginUser";
 import ProtectedRoute from "./components/ProtectedRoute";
+import DashboardHome from "./pages/Dashboard";
 
 const route = createBrowserRouter([
   {
@@ -20,15 +19,11 @@ const route = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <ProtectedRoute Component={Home} />,
+        element: <Home />,
       },
       {
-        path: "about",
-        element: <About />,
-      },
-      {
-        path: "contact",
-        element: <Contact />,
+        path: "dashboard",
+        element: <ProtectedRoute Component={DashboardHome} />,
       },
       {
         path: "login",

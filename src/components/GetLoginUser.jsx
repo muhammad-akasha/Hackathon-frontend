@@ -30,17 +30,16 @@ const GetLoginUser = () => {
           setUser({
             name: res.data.user.userName,
             email: res.data.user.email,
-            picture: res.data.user.profilePic.profilePic,
             role: res.data.user.role,
           })
         );
       } catch (error) {
-        if (err.response && err.response.status === 401) {
+        if (error.response && error.response.status === 401) {
           // Access token is expired, refresh it
           console.log("Access token expired. Trying to refresh...");
           refreshToken();
         } else {
-          console.log(err);
+          console.log(error);
         }
         dispatch(setUser({})); // Reset user if error occurs
       } finally {

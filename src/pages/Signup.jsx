@@ -17,42 +17,44 @@ const Signup = () => {
   const dispatch = useDispatch();
 
   const onSubmit = async (data) => {
-    const { username, email, password, profilePicture, role } = data;
-    console.log(role);
+    const { fullName, email, password, role, cnic } = data;
 
     const formData = new FormData();
 
     // Append text fields
-    formData.append("userName", username);
+    formData.append("userName", fullName);
     formData.append("email", email);
     formData.append("password", password);
     formData.append("role", role);
-
-    // Append the file (profile picture)
-    formData.append("image", profilePicture[0]); // Assuming profilePicture is a file input
+    formData.append("cnic", cnic);
 
     try {
+      // Register User API call
       const res = await api.post("/register", formData, {
         headers: {
           "Content-Type": "multipart/form-data", // Ensure it's set
         },
       });
       if (res.status === 200) {
-        const res = await api.post("login", {
+        // After successful registration, login the user
+        const loginRes = await api.post("login", {
           email,
           password,
         });
 
         dispatch(
           setUser({
-            name: res.data.user.userName,
-            email: res.data.user.email,
-            picture: res.data.user.profilePic.profilePic,
-            role: res.data.user.role,
+            name: loginRes.data.user.userName,
+            email: loginRes.data.user.email,
+            role: loginRes.data.user.role,
           })
         );
 
+        // Navigate to the home page
         navigate("/");
+
+        // After first login, prompt for password change (could be handled in the profile settings)
+        alert("Please change your password upon first login.");
       }
     } catch (error) {
       console.log(error);
@@ -69,33 +71,59 @@ const Signup = () => {
         onSubmit={handleSubmit(onSubmit)}
         noValidate
       >
-        {/* Username Field */}
+        {/* Full Name Field */}
         <div className="relative z-0 w-full mb-5 group">
           <input
             type="text"
-            id="username"
+            id="fullName"
             className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
             placeholder=" "
-            {...register("username", {
-              required: "Username is required",
+            {...register("fullName", {
+              required: "Full name is required",
               minLength: {
                 value: 3,
-                message: "Username must be at least 3 characters long",
+                message: "Full name must be at least 3 characters long",
               },
               maxLength: {
-                value: 30,
-                message: "Username cannot exceed 30 characters",
+                value: 50,
+                message: "Full name cannot exceed 50 characters",
               },
             })}
           />
           <label
-            htmlFor="username"
+            htmlFor="fullName"
             className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
           >
-            Username
+            Full Name
           </label>
-          {errors.username && (
-            <p className="text-red-500 text-sm">{errors.username.message}</p>
+          {errors.fullName && (
+            <p className="text-red-500 text-sm">{errors.fullName.message}</p>
+          )}
+        </div>
+
+        {/* CNIC Field */}
+        <div className="relative z-0 w-full mb-5 group">
+          <input
+            type="text"
+            id="cnic"
+            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+            placeholder=" "
+            {...register("cnic", {
+              required: "CNIC is required",
+              pattern: {
+                value: /^[0-9]{5}-[0-9]{7}-[0-9]{1}$/,
+                message: "Enter a valid CNIC (e.g., 12345-1234567-1)",
+              },
+            })}
+          />
+          <label
+            htmlFor="cnic"
+            className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+          >
+            CNIC
+          </label>
+          {errors.cnic && (
+            <p className="text-red-500 text-sm">{errors.cnic.message}</p>
           )}
         </div>
 
@@ -206,50 +234,17 @@ const Signup = () => {
           )}
         </div>
 
-        {/* File Input Field */}
-        <div className="relative z-0 w-full mb-5 group flex">
-          <input
-            type="file"
-            id="profile_picture"
-            accept=".jpeg, .jpg, .png"
-            className="mt-4 pb-2 cursor-pointer block w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600"
-            {...register("profilePicture", {
-              required: "Profile picture is required",
-            })}
-          />
-          <label
-            htmlFor="profile_picture"
-            className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 mb-10 block"
-          >
-            Upload Profile Picture
-          </label>
-          {errors.profilePicture && (
-            <p className="text-red-500 text-sm">
-              {errors.profilePicture.message}
-            </p>
-          )}
-        </div>
-
         {/* Submit Button */}
-        <button
-          disabled={isSubmitting}
-          type="submit"
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-        >
-          {isSubmitting ? "Signing up" : "Sign Up"}
-        </button>
+        <div className="flex justify-center">
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md disabled:bg-gray-400"
+          >
+            Sign Up
+          </button>
+        </div>
       </form>
-
-      {/* Sign Up Link */}
-      <p className="text-sm text-center mt-5 text-gray-600 dark:text-gray-300">
-        Already have an account?{" "}
-        <Link
-          to="/login"
-          className="text-blue-600 hover:underline dark:text-blue-400"
-        >
-          Sign in
-        </Link>
-      </p>
     </section>
   );
 };

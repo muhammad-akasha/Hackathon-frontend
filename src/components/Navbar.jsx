@@ -22,7 +22,7 @@ import { setUser } from "../reduxconfig/reducers/userSlice";
 import Loader from "./Loader";
 
 const drawerWidth = 240;
-const navItems = ["Home", "About", "Contact"];
+const navItems = ["Home", "Dashboard", "Contact"];
 
 function Navbar(props) {
   const user = useSelector((state) => state.users.user);
@@ -201,7 +201,7 @@ function Navbar(props) {
           <img
             width={40}
             height={40}
-            src={user.picture} // Display user picture
+            src={user.picture || "/public/vite.svg"} // Display user picture
             alt={user.name || "User"} // Fallback alt if name is missing
             style={{ borderRadius: "50%" }} // Make the image circular
           />
